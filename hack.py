@@ -8,8 +8,9 @@ https://drive.google.com/open?id=1CITliwTJzq19ibBF5EeuNBZ3MJ01dKoI&authuser=scho
 for details.
 """
 
-from modules import parser
+from modules.parser import Parser
 
 if __name__ == "__main__":
+    parser = Parser()
     print("Hello world!")
     print(parser.find_opcode("D|A"))
