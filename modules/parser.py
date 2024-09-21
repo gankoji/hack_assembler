@@ -3,11 +3,20 @@
 from .opcodes.opcode import opcode_dict
 
 class CommandToken:
-    def __init__(self, is_c: bool, opcode: int, dest: str, jump: str):
+    def __init__(
+            self,
+            is_c: bool,
+            opcode: int,
+            dest: str,
+            jump: str
+    ):
         self.is_c: bool = is_c
         self.opcode: int = opcode
         self.dest: str = dest
         self.jump: str = jump
+
+    def __str__(self):
+        return f'{self.is_c},{self.opcode},Dest:{self.dest},Jump:{self.jump}'
 
 class Parser():
     def lex_line(self, line: str) -> CommandToken:
@@ -23,15 +32,15 @@ class Parser():
         line = line.rstrip() # And the end, too
         if line[0] == "@":
             # We have an A instruction
-            return CommandToken(False, -1, int(line[1:]),_)
+            return CommandToken(False, -1, line[1:],None)
         elif line[0] == "(":
             # We have a label definition
             line = line.rstrip(")")
             line = line.lstrip("(")
-            return CommandToken(False, -1, line, _)
+            return CommandToken(False, -1, line,None)
         else:
             # We have some type of C instruction
-            return lex_c_inst(line)
+            return self.lex_c_inst(line)
 
     def lex_c_inst(self, line: str) -> CommandToken:
         """Tokenify a C instruction. C instruction format is
@@ -46,25 +55,34 @@ class Parser():
         """
         # First, we split on the two separators to see what we have
         ls = line.split("=")
-        if ls[0] == "":
+        if len(ls) == 1:
             # dest is empty
-            dest = ""
+            dest = None
+            rest = 0
         else:
             dest = ls[0]
-        rs = ls.split(";")
-        if rs[1] == "":
+            rest = 1
+
+        rs = ls[rest].split(";")
+        if len(rs) == 1:
             # jump is empty
             jump = None
         else:
             jump = rs[1]
 
         c = rs[0]
-        comp = find_opcode(c)
+        comp = self.find_opcode(c)
 
         return CommandToken(True, comp, dest, jump)
 
     def find_opcode(self, c: str) -> int:
         return opcode_dict[c]
 
+    def parse_file(self, file: [str]) -> [CommandToken]:
+        out = []
+        for line in file:
+            out.append(self.lex_line(line))
+
+        return out
 if __name__ == "main":
     print("hello world")

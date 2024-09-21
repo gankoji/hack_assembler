@@ -1,0 +1,8 @@
+@17
+M=A
+(LOOP)
+D=M
+D+1
+M=D
+@LOOP
+0;JMP
