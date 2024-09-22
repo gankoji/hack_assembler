@@ -19,6 +19,10 @@ class CommandToken:
         return f'{self.is_c},{self.opcode},Dest:{self.dest},Jump:{self.jump}'
 
 class Parser():
+    def remove_comments(self, line: str) -> str:
+        comment_start = line.find("//")
+        return line[0:comment_start]
+
     def lex_line(self, line: str) -> CommandToken:
         """Return a list of tokens from the given line of Hack assembly code.
 
@@ -28,8 +32,16 @@ class Parser():
             Returns:
                 A list of tokens extracted from the line. Format is (is_c, opcode, dest, jump)
         """
+
+        # Preprocess the line
+        line = self.remove_comments(line) # Get rid of comments
         line = line.lstrip() # Remove beginning whitespace
         line = line.rstrip() # And the end, too
+
+        # Don't process if there's nothing left
+        if len(line) == 0:
+            return None
+
         if line[0] == "@":
             # We have an A instruction
             return CommandToken(False, -1, line[1:],None)
@@ -81,7 +93,9 @@ class Parser():
     def parse_file(self, file: [str]) -> [CommandToken]:
         out = []
         for line in file:
-            out.append(self.lex_line(line))
+            lexed = self.lex_line(line)
+            if lexed:
+                out.append(lexed)
 
         return out
 if __name__ == "main":
