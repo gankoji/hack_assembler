@@ -21,7 +21,12 @@ class CommandToken:
 class Parser():
     def remove_comments(self, line: str) -> str:
         comment_start = line.find("//")
-        return line[0:comment_start]
+        if comment_start == -1:
+            return line
+        elif comment_start == 0:
+            return ""
+        else:
+            return line[0:comment_start]
 
     def lex_line(self, line: str) -> CommandToken:
         """Return a list of tokens from the given line of Hack assembly code.

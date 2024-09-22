@@ -21,8 +21,7 @@ class testHack(unittest.TestCase):
 0000000000001010
 1111000111010000
 0000000000000010
-1110101010000010
-"""
+1110101010000010"""
 
         # Act
         res = self.hack.assemble_file("assembler_test_no_symbols.asm")
@@ -32,10 +31,10 @@ class testHack(unittest.TestCase):
         self.assertEqual(len(res), len(expected))
 
     @parameterized.expand([
-        ("tests/add.asm","tests/add.hack"),
-        ("tests/max.asm","tests/max.hack"),
-        ("tests/add.asm","tests/add.hack"),
-        ("tests/add.asm","tests/add.hack"),
+        (  "tests/add.asm",  "tests/add.hack"),
+        ( "tests/maxL.asm", "tests/maxL.hack"),
+        ("tests/pongL.asm","tests/pongL.hack"),
+        ("tests/rectL.asm","tests/rectL.hack"),
     ])
     def test_golden_inputs(self, input_file, expected_file):
         expected = ""

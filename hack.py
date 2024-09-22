@@ -24,14 +24,16 @@ class Hack():
 
         parsed = self.parser.parse_file(lines)
 
-        output = ""
-        for token_tuple in parsed:
+        for i,token_tuple in enumerate(parsed):
             if token_tuple.is_c:
                 inst = self.encoder.encode_c_inst(token_tuple)
             else:
                 inst = self.encoder.encode_a_inst(token_tuple)
 
-            output = output + inst + "\n"
+            if i == 0:
+                output = inst
+            else:
+                output = output + "\n" + inst
 
         return output
 

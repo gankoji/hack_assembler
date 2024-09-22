@@ -53,6 +53,10 @@ class TestParser(unittest.TestCase):
         res = self.parser.lex_line(line)
 
         # Assert
+        if not compareTokens(res,expected):
+            print("Compare tokens failed. res vs expected:")
+            print(res)
+            print(expected)
         self.assertTrue(compareTokens(res,expected))
 
     def test_parse_file(self):
