@@ -43,10 +43,13 @@ class testHack(unittest.TestCase):
         self.assertEqual(len(res), len(expected))
 
     @parameterized.expand([
-        (  "tests/add.asm",  "tests/add.hack"),
-        ( "tests/maxL.asm", "tests/maxL.hack"),
-        ("tests/pongL.asm","tests/pongL.hack"),
-        ("tests/rectL.asm","tests/rectL.hack"),
+        (  "tests/add.asm",   "tests/add.hack"),
+        (  "tests/max.asm",   "tests/max.hack"),
+        ( "tests/pong.asm",  "tests/pong.hack"),
+        ( "tests/rect.asm",  "tests/rect.hack"),
+        ( "tests/maxL.asm",  "tests/maxL.hack"),
+        ("tests/pongL.asm", "tests/pongL.hack"),
+        ("tests/rectL.asm", "tests/rectL.hack"),
     ])
     def test_golden_inputs(self, input_file, expected_file):
         expected = ""
