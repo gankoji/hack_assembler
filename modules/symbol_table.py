@@ -44,7 +44,7 @@ class SymbolTable():
 
     def add_entry(self, label: str, addr: int):
         if self.contains(label):
-            print("Error, label already exists.")
+            print(f"Error, label {label} already exists.")
             return
 
         self.symbol_table[label] = addr
@@ -54,6 +54,6 @@ class SymbolTable():
 
     def get_address(self, label):
         if not self.contains(label):
-            print("Error, symbol not in table.")
+            print(f"Error, symbol {label} not in table.")
 
         return self.symbol_table[label]

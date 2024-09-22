@@ -3,6 +3,18 @@ from parameterized import parameterized
 
 from hack_assembler import hack
 
+def compareBinaryOutputs(a, b):
+    ar = a.split("\n")
+    br = b.split("\n")
+
+    success = True
+    for al, bl in zip(ar,br):
+        if al != bl:
+            print(f"Diff found:\n{al}\n{bl}")
+            success = False
+
+    return success
+
 class testHack(unittest.TestCase):
     def setUp(self):
         self.hack = hack.Hack()
@@ -42,9 +54,6 @@ class testHack(unittest.TestCase):
             expected = f.read()
 
         res = self.hack.assemble_file(input_file)
-        if res != expected:
-            print(f"Failed to match for input {input_file}.")
-            print(res)
-            print("\n" + expected)
 
-        self.assertEqual(res, expected)
+
+        self.assertTrue(compareBinaryOutputs(res, expected))

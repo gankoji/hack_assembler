@@ -5,18 +5,22 @@ from .opcodes.opcode import opcode_dict
 class CommandToken:
     def __init__(
             self,
-            is_c: bool,
-            opcode: int,
-            dest: str,
-            jump: str
+            is_c:    bool,
+            opcode:  int | None,
+            dest:    str | int | None,
+            jump:    str | None,
+            label:   str | None = None
     ):
-        self.is_c: bool = is_c
-        self.opcode: int = opcode
-        self.dest: str = dest
-        self.jump: str = jump
+        self.is_c = is_c
+        self.is_l = label is not None
+        self.opcode = opcode
+        self.dest = dest
+        self.jump = jump
+        self.label = label
+
 
     def __str__(self):
-        return f'{self.is_c},{self.opcode},Dest:{self.dest},Jump:{self.jump}'
+        return f'{self.is_c},{self.opcode},Dest:{self.dest},Jump:{self.jump},Label:{self.label},IsLabel:{self.is_l}'
 
 class Parser():
     def remove_comments(self, line: str) -> str:
@@ -49,12 +53,21 @@ class Parser():
 
         if line[0] == "@":
             # We have an A instruction
-            return CommandToken(False, -1, line[1:],None)
+            dest = None
+            label = None
+            try:
+                dest = int(line[1:])
+                print(f"Translated to int: {dest}")
+            except ValueError:
+                label = line[1:]
+                print(f"Couldn't translate to int: {label}")
+
+            return CommandToken(False, -1, dest, None, label)
         elif line[0] == "(":
             # We have a label definition
             line = line.rstrip(")")
             line = line.lstrip("(")
-            return CommandToken(False, -1, line,None)
+            return CommandToken(False, -1, None, None, line)
         else:
             # We have some type of C instruction
             return self.lex_c_inst(line)

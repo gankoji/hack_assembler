@@ -43,10 +43,10 @@ class TestParser(unittest.TestCase):
 
     # Arrange
     @parameterized.expand([
-        ("@17", CommandToken(False,-1,"17",None)),
-        ("(LOOP)", CommandToken(False,-1,"LOOP",None)),
-        ("    M=D|A;JNE", CommandToken(True,0b0010101,"M","JNE")),
-        ("0;JMP", CommandToken(True,0b0101010,None,"JMP"))
+        (          "@17", CommandToken(False,        -1,   17, None)),
+        (       "(LOOP)", CommandToken(False,        -1, None, None, "LOOP")),
+        ("    M=D|A;JNE", CommandToken( True, 0b0010101,  "M","JNE")),
+        (        "0;JMP", CommandToken( True, 0b0101010, None,"JMP"))
     ])
     def test_lex_line(self, line, expected):
         # Act
@@ -62,14 +62,14 @@ class TestParser(unittest.TestCase):
     def test_parse_file(self):
         # Arrange
         expected = [
-            CommandToken(False,-1,"17",None), # @17
-            CommandToken(True,0b0110000,"M",None), # M=A
-            CommandToken(False,-1,"LOOP",None), # (LOOP)
-            CommandToken(True,0b1110000, "D",None), # D=M
-            CommandToken(True,0b0011111,None,None), # D+1
-            CommandToken(True,0b0001100,"M",None), # M=D
-            CommandToken(False,-1,"LOOP",None), # @LOOP
-            CommandToken(True,0b0101010,None,"JMP"), # 0;JMP
+            CommandToken(False,       -1,     17, None), # @17
+            CommandToken( True,0b0110000,    "M", None), # M=A
+            CommandToken(False,       -1,   None, None, "LOOP"), # (LOOP)
+            CommandToken( True,0b1110000,    "D", None), # D=M
+            CommandToken( True,0b0011111,   None, None), # D+1
+            CommandToken( True,0b0001100,    "M", None), # M=D
+            CommandToken(False,       -1,   None, None, "LOOP"), # @LOOP
+            CommandToken( True,0b0101010,   None,"JMP"), # 0;JMP
         ]
 
 
