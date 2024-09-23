@@ -68,7 +68,7 @@ class TestParser(unittest.TestCase):
             CommandToken( True,0b1110000,    "D", None,   None), # D=M
             CommandToken( True,0b0011111,   None, None,   None), # D+1
             CommandToken( True,0b0001100,    "M", None,   None), # M=D
-            CommandToken(False,       -1,   None, None, "LOOP"), # @LOOP
+            CommandToken(False,       -1, "LOOP", None,   None), # @LOOP
             CommandToken( True,0b0101010,   None,"JMP",   None), # 0;JMP
         ]
 

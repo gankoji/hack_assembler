@@ -27,18 +27,37 @@ class Hack():
         parsed = self.parser.parse_file(lines)
 
         # First pass
+        print("First pass over input to generate symbol table")
         for i,token_tuple in enumerate(parsed):
             if token_tuple.is_l:
-                self.st.add_entry(token_tuple.dest, i+1)
+                self.st.add_entry(token_tuple.label, i+1)
+
+        print("Symbol table generated.")
+        free_addr = 16 # Could be dynamic, this is just after the last of our predefined symbols in RAM
 
         # Second pass
+        print("Second pass over input to generate machine code with addresses")
         for i,token_tuple in enumerate(parsed):
             if self.st.contains(token_tuple.dest):
                 token_tuple.dest = self.st.get_address(token_tuple.dest)
 
             if token_tuple.is_c:
+                # Standard path, generate an instruction
                 inst = self.encoder.encode_c_inst(token_tuple)
+            elif token_tuple.is_l:
+                # We have a label instruction, don't generate any code
+                continue
             else:
+                # We have an A instruction
+                # First, check if we're declaring a variable
+                if isinstance(token_tuple.dest, str):
+                    # Put it in the symbol table too
+                    self.st.add_entry(token_tuple.dest, free_addr)
+                    # Replace it in the instruction...
+                    token_tuple.dest = free_addr
+                    # and increment our pointer
+                    free_addr += 1
+
                 inst = self.encoder.encode_a_inst(token_tuple)
 
             if i == 0:

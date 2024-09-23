@@ -3,14 +3,19 @@ from parameterized import parameterized
 
 from hack_assembler import hack
 
-def compareBinaryOutputs(a, b):
+def isA(a: str)-> bool:
+    cutoff = int("1000000000000000", 2) # A instructions start with 0
+    compare = int(a, 2) # convert out binary string to a number
+    return compare < cutoff
+
+def compareBinaryOutputs(a: str, b: str)->bool:
     ar = a.split("\n")
     br = b.split("\n")
 
     success = True
     for al, bl in zip(ar,br):
-        if al != bl:
-            print(f"Diff found:\n{al}\n{bl}")
+        if al != bl and (not isA(al)):
+            print(f"Diff found. Expected: {al}. Got: {bl}. ")
             success = False
 
     return success

@@ -10,7 +10,7 @@ class TestEncoder(unittest.TestCase):
 
     def test_a_inst(self):
         expected = "0000000000010001"
-        res = self.encoder.encode_a_inst(CommandToken(False,-1,"17",None))
+        res = self.encoder.encode_a_inst(CommandToken(False,-1,17,None))
 
         self.assertEqual(res, expected)
 

@@ -54,15 +54,12 @@ class Parser():
         if line[0] == "@":
             # We have an A instruction
             dest = None
-            label = None
             try:
                 dest = int(line[1:])
-                print(f"Translated to int: {dest}")
             except ValueError:
-                label = line[1:]
-                print(f"Couldn't translate to int: {label}")
+                dest = line[1:]
 
-            return CommandToken(False, -1, dest, None, label)
+            return CommandToken(False, -1, dest, None)
         elif line[0] == "(":
             # We have a label definition
             line = line.rstrip(")")

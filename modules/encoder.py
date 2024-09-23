@@ -10,11 +10,13 @@ from hack_assembler.modules.opcodes.opcode import dest_dict, jump_dict
 class Encoder():
 
     def encode_a_inst(self, tokens: CommandToken) -> str:
-        bits = ["0"]
-        dest_addr = int(tokens.dest)
-        bin_str = f'{dest_addr:>015b}'
-        bits.append(bin_str)
-        return "".join(bits)
+        if tokens.dest is None:
+            print("ERROR: Cannot generate an A instruction without an address.")
+            print(tokens)
+            return "0"
+
+        bin_str = f'0{tokens.dest:>015b}'
+        return bin_str
 
     def encode_c_inst(self, tokens: CommandToken) -> str:
 
